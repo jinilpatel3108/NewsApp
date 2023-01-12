@@ -33,6 +33,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        //temp
         val trendViewModel = ViewModelProvider(this).get(TrendingViewModel::class.java)
         _binding = FragmentTrendingBinding.inflate(inflater, container, false)
 
