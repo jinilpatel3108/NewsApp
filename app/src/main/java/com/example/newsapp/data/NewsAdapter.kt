@@ -25,9 +25,9 @@ class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<N
 
         val viewHolder = NewsViewHolder(view)
         view.setOnClickListener{
-            listener.onItemClicked(items[viewHolder.adapterPosition + 1])
+            listener.onItemClicked(items[(viewHolder.absoluteAdapterPosition)])
         }
-        return NewsViewHolder(view)
+        return viewHolder
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
