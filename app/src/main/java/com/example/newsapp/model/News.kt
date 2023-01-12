@@ -8,7 +8,8 @@ import java.util.Date
 data class News(
     val title: String,
     val description: String,
-    val author: String,
+    val name: String,
     val publishedAt: String,
-    @SerialName("urlToImage") val image: String
+    @SerialName("urlToImage") val image: String,
+    val url: String
 )

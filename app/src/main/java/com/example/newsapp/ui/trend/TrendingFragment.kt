@@ -1,5 +1,7 @@
 package com.example.newsapp.ui.trend
 
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -19,6 +22,7 @@ import com.example.newsapp.data.NewsContainer
 import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentTrendingBinding
 import com.example.newsapp.model.News
+import okhttp3.internal.Internal.instance
 
 class TrendingFragment : Fragment(), NewsItemClicked{
 
@@ -64,7 +68,6 @@ class TrendingFragment : Fragment(), NewsItemClicked{
             Response.Listener {
                 val newsJsonArray = it.getJSONArray("articles")
 
-                System.out.println("Array:"+newsJsonArray)
                 val newsArray = ArrayList<News>()
 
                 for(i in 0 until newsJsonArray.length()) {
@@ -72,9 +75,10 @@ class TrendingFragment : Fragment(), NewsItemClicked{
                     val news = News(
                         newJsonObject.getString("title"),
                         newJsonObject.getString("description"),
-                        newJsonObject.getString("author"),
+                        newJsonObject.getJSONObject("source").getString("name"),
                         newJsonObject.getString("publishedAt"),
-                        newJsonObject.getString("urlToImage")
+                        newJsonObject.getString("urlToImage"),
+                        newJsonObject.getString("url")
                     )
 
                     newsArray.add(news)
@@ -99,7 +103,10 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     }
 
     override fun onItemClicked(item: News) {
-//        TODO("Not yet implemented")
+        val builder = CustomTabsIntent.Builder()
+        val customTabsIntent = builder.build()
+
+        context?.let { customTabsIntent.launchUrl(it, Uri.parse(item.url)) }
     }
 
 
