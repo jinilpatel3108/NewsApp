@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="15dp">
+
+    <ImageView
+        android:id="@+id/imageNews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    
+    <TextView
+        android:id="@+id/titleNews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_news_demo"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageNews"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    
+    <TextView
+        android:id="@+id/descriptionNews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/description_news_demo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleNews"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="7dp"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:id="@+id/sourceNews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sources"
+        android:layout_marginTop="12dp"
+        android:textColor="#ff00ff"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionNews"
+        />
+
+    <TextView
+        android:id="@+id/publishedNews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/date_news"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/descriptionNews"
+        android:textAlignment="textEnd"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,4 +5,8 @@
     <string name="title_search">Search</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_news_demo">Title (Max 2 lines)</string>
+    <string name="description_news_demo">Description (Max 4 lines)</string>
+    <string name="sources">Sources</string>
+    <string name="date_news">Published date</string>
 </resources>
