@@ -17,7 +17,7 @@ class SavedFragment : Fragment() {
     private var _binding: FragmentSavedBinding? = null
 
     private val binding get() = _binding!!
-// comment
+// comment made
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
