@@ -3,8 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="15dp"
-    android:elevation="5dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="5dp"
+    android:padding="10dp"
+    android:elevation="5dp"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/imageNews"
@@ -21,8 +24,9 @@
         android:id="@+id/titleNews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_news_demo"
+        tools:text="@string/title_news_demo"
         android:textStyle="bold"
+        android:maxLines="2"
         android:textSize="16sp"
         android:textColor="@color/black"
         android:layout_marginTop="5dp"
@@ -35,11 +39,12 @@
         android:id="@+id/descriptionNews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/description_news_demo"
+        tools:text="@string/description_news_demo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleNews"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="7dp"
+        android:maxLines="4"
         android:textColor="@color/black"
         />
 
@@ -47,7 +52,7 @@
         android:id="@+id/sourceNews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sources"
+        tools:text="@string/sources"
         android:layout_marginTop="12dp"
         android:textColor="#ff00ff"
         android:textSize="15sp"
@@ -59,7 +64,7 @@
         android:id="@+id/publishedNews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/date_news"
+        tools:text="@string/date_news"
         android:layout_marginTop="12dp"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"

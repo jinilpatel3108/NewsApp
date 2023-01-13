@@ -8,21 +8,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import com.example.newsapp.MainActivity
-import com.example.newsapp.R
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.data.NewsContainer
 import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentTrendingBinding
 import com.example.newsapp.model.News
-import okhttp3.internal.Internal.instance
 
 class TrendingFragment : Fragment(), NewsItemClicked{
 

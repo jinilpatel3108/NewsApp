@@ -16,7 +16,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<NewsViewHolder>() {
+class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     private val items: ArrayList<News> = ArrayList()
 
@@ -24,10 +24,12 @@ class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<N
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_news, parent,false)
 
         val viewHolder = NewsViewHolder(view)
-        view.setOnClickListener{
-            listener.onItemClicked(items[viewHolder.adapterPosition + 1])
+
+        view.setOnClickListener {
+            listener.onItemClicked(items[viewHolder.adapterPosition])
         }
-        return NewsViewHolder(view)
+
+        return viewHolder
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -56,16 +58,18 @@ class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<N
 
         notifyDataSetChanged()
     }
+
+    inner class NewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val titleView: TextView = itemView.findViewById(R.id.titleNews)
+        val imageView: ImageView = itemView.findViewById(R.id.imageNews)
+        val dateView: TextView = itemView.findViewById(R.id.publishedNews)
+        val descriptionView: TextView = itemView.findViewById(R.id.descriptionNews)
+        val sourceView: TextView = itemView.findViewById(R.id.sourceNews)
+
+    }
 }
 
-class NewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val titleView: TextView = itemView.findViewById(R.id.titleNews)
-    val imageView: ImageView = itemView.findViewById(R.id.imageNews)
-    val dateView: TextView = itemView.findViewById(R.id.publishedNews)
-    val descriptionView: TextView = itemView.findViewById(R.id.descriptionNews)
-    val sourceView: TextView = itemView.findViewById(R.id.sourceNews)
 
-}
 
 interface NewsItemClicked {
     fun onItemClicked(item: News)
