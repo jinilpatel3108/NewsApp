@@ -8,17 +8,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.TextView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
+import com.example.newsapp.MainActivity
+import com.example.newsapp.R
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.data.NewsContainer
 import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentTrendingBinding
 import com.example.newsapp.model.News
+import com.example.newsapp.ui.SingleNews
+import okhttp3.internal.Internal.instance
 
 class TrendingFragment : Fragment(), NewsItemClicked{
 
@@ -27,6 +34,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     private val binding get() = _binding!!
 
     private lateinit var mAdapter: NewsAdapter
+    private lateinit var webView: WebView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,10 +107,14 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     }
 
     override fun onItemClicked(item: News) {
-        val builder = CustomTabsIntent.Builder()
-        val customTabsIntent = builder.build()
+//        val builder = CustomTabsIntent.Builder()
+//        val customTabsIntent = builder.build()
+//
+//        context?.let { customTabsIntent.launchUrl(it, Uri.parse(item.url)) }
 
-        context?.let { customTabsIntent.launchUrl(it, Uri.parse(item.url)) }
+        val intent = Intent(context, SingleNews::class.java)
+        startActivity(intent)
+
     }
 
 
