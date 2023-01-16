@@ -107,15 +107,9 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     }
 
     override fun onItemClicked(item: News) {
-//        val builder = CustomTabsIntent.Builder()
-//        val customTabsIntent = builder.build()
-//
-//        context?.let { customTabsIntent.launchUrl(it, Uri.parse(item.url)) }
-
         val intent = Intent(context, SingleNews::class.java)
         intent.putExtra("UrlValue", item.url)
         startActivity(intent)
-
     }
 
 
