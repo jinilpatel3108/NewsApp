@@ -113,6 +113,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 //        context?.let { customTabsIntent.launchUrl(it, Uri.parse(item.url)) }
 
         val intent = Intent(context, SingleNews::class.java)
+        intent.putExtra("UrlValue", item.url)
         startActivity(intent)
 
     }
