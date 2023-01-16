@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter
 
 class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<NewsViewHolder>() {
 
-    private val items: ArrayList<News> = ArrayList()
+    private val items: MutableList<News> = mutableListOf<News>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_news, parent,false)
