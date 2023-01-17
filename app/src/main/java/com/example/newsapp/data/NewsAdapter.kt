@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.newsapp.R
 import com.example.newsapp.model.News
+import com.example.newsapp.utils.Utils
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -20,12 +21,13 @@ class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<N
 
     private val items: MutableList<News> = mutableListOf<News>()
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_news, parent,false)
 
         val viewHolder = NewsViewHolder(view)
         view.setOnClickListener{
-            listener.onItemClicked(items[(viewHolder.absoluteAdapterPosition)])
+            listener.onItemClicked(items[viewHolder.adapterPosition])
         }
         return viewHolder
     }
@@ -39,8 +41,7 @@ class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<N
 
         holder.sourceView.text = currentItem.name
 
-        val parsedDate = LocalDateTime.parse(currentItem.publishedAt, DateTimeFormatter.ISO_DATE_TIME)
-        val formattedDate = parsedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+        val formattedDate = Utils.dateFormatChanger(currentItem.publishedAt)
 
         holder.dateView.text = formattedDate
         Glide.with(holder.itemView.context).load(currentItem.image).into(holder.imageView)
@@ -59,6 +60,7 @@ class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<N
 }
 
 class NewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
     val titleView: TextView = itemView.findViewById(R.id.titleNews)
     val imageView: ImageView = itemView.findViewById(R.id.imageNews)
     val dateView: TextView = itemView.findViewById(R.id.publishedNews)
