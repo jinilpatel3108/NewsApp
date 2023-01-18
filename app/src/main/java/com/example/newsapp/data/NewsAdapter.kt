@@ -44,14 +44,14 @@ class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<N
         val formattedDate = Utils.dateFormatChanger(currentItem.publishedAt)
 
         holder.dateView.text = formattedDate
-        Glide.with(holder.itemView.context).load(currentItem.image).into(holder.imageView)
+        Glide.with(holder.itemView.context).load(currentItem.urlToImage).into(holder.imageView)
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    fun updateNews(updatedNews: ArrayList<News>) {
+    fun updateNews(updatedNews: List<News>) {
         items.clear()
         items.addAll(updatedNews)
 

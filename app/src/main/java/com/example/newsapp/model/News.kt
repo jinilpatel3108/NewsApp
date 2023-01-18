@@ -10,6 +10,6 @@ data class News(
     val description: String,
     val name: String,
     val publishedAt: String,
-    @SerialName("urlToImage") val image: String,
+    @SerialName("urlToImage") val urlToImage: String,
     val url: String
 )

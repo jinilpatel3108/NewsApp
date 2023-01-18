@@ -1,6 +1,7 @@
 package com.example.newsapp.utils
 
 import com.example.newsapp.model.News
+import com.example.newsapp.model.Response
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,5 +29,5 @@ class ApiClient {
 
 public interface APIInterface {
     @GET("top-headlines")
-    suspend fun getLatestNews(@Query("country") source: String, @Query("apiKey") apiKey:String) : Call<News>
+    fun getLatestNews(@Query("country") source: String, @Query("apiKey") apiKey:String) : Call<Response>
 }

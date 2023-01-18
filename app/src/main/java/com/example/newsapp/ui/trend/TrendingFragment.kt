@@ -13,13 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.data.NewsContainer
 import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentTrendingBinding
 import com.example.newsapp.model.News
+import com.example.newsapp.model.Response
 import com.example.newsapp.ui.SingleNews
 import com.example.newsapp.utils.APIInterface
 import com.example.newsapp.utils.ApiClient
@@ -37,6 +37,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     private lateinit var mAdapter: NewsAdapter
     private lateinit var webView: WebView
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,7 +52,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-//        fetchData()
+        fetchData()
         mAdapter = NewsAdapter(this)
 
         recyclerView.adapter =mAdapter
@@ -64,15 +65,34 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun fetchData() {
+    private fun fetchData() {
         val BASE_URL = "https://newsapi.org/v2/top-headlines?country=in&apiKey=66ac55a588a94186be5858f7672344fb"
 
         val apiService: APIInterface = ApiClient.getClient().create<APIInterface>(APIInterface::class.java)
 
-        val call : Call<News> = apiService.getLatestNews("in",Utils.API_KEY);
+        val call : Call<Response> = apiService.getLatestNews("in",Utils.API_KEY);
 
 
-//        call.enqueue()
+        call.enqueue(object: Callback<Response> {
+            override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
+
+                if(response.body()?.status.equals("ok")) {
+                    val articleList : List<News> = response.body()!!.news;
+                    if(articleList.isNotEmpty()) {
+                        println("ArrayList"+articleList)
+                        mAdapter.updateNews(articleList)
+                    }
+
+//                mAdapter.updateNews(!!)
+                }
+            }
+
+            override fun onFailure(call: Call<Response>, t: Throwable) {
+                println("Array: Error")
+            }
+
+
+        })
 
 
 
