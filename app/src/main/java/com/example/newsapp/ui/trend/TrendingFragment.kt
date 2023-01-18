@@ -79,62 +79,15 @@ class TrendingFragment : Fragment(), NewsItemClicked{
                 if(response.body()?.status.equals("ok")) {
                     val articleList : List<News> = response.body()!!.news;
                     if(articleList.isNotEmpty()) {
-                        println("ArrayList"+articleList)
                         mAdapter.updateNews(articleList)
                     }
-
-//                mAdapter.updateNews(!!)
                 }
             }
 
             override fun onFailure(call: Call<Response>, t: Throwable) {
                 println("Array: Error")
             }
-
-
         })
-
-
-
-//        val jsonObjectRequest = object: JsonObjectRequest(
-//            Request.Method.GET,
-//            BASE_URL,
-//            null,
-//            Response.Listener {
-//                val newsJsonArray = it.getJSONArray("articles")
-//
-//                val newsArray = ArrayList<News>()
-//
-//                for(i in 0 until newsJsonArray.length()) {
-//                    val newJsonObject = newsJsonArray.getJSONObject(i)
-//                    val news = News(
-//                        newJsonObject.getString("title"),
-//                        newJsonObject.getString("description"),
-//                        newJsonObject.getJSONObject("source").getString("name"),
-//                        newJsonObject.getString("publishedAt"),
-//                        newJsonObject.getString("urlToImage"),
-//                        newJsonObject.getString("url")
-//                    )
-//
-//                    newsArray.add(news)
-//                }
-//
-//                mAdapter.updateNews(newsArray)
-//            },
-//
-//            Response.ErrorListener {
-//                System.out.println("Erorr: ")
-//            }
-//        ) {
-//            override fun getHeaders(): MutableMap<String, String> {
-//                val headers = HashMap<String, String>()
-//                headers["User-Agent"] = "Mozilla/5.0"
-//                return headers
-//            }
-//        }
-
-//        context?.let { NewsContainer.getInstance(it).addToRequestQueue(jsonObjectRequest) }
-
     }
 
     override fun onItemClicked(item: News) {
@@ -142,6 +95,4 @@ class TrendingFragment : Fragment(), NewsItemClicked{
         intent.putExtra("UrlValue", item.url)
         startActivity(intent)
     }
-
-
 }

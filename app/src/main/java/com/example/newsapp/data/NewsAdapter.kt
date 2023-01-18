@@ -39,7 +39,7 @@ class NewsAdapter(private val listener: NewsItemClicked): RecyclerView.Adapter<N
 
         holder.descriptionView.text = currentItem.description
 
-        holder.sourceView.text = currentItem.name
+        holder.sourceView.text = currentItem.source.name
 
         val formattedDate = Utils.dateFormatChanger(currentItem.publishedAt)
 
