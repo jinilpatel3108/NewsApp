@@ -24,7 +24,6 @@ data class News(
     val url: String
 )
 
-
 data class Source(
 
     @SerializedName("name")
