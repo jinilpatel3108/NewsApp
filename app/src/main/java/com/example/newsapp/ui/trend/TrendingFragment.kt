@@ -12,10 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
 import com.example.newsapp.data.NewsAdapter
-import com.example.newsapp.data.NewsContainer
 import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentTrendingBinding
 import com.example.newsapp.model.News

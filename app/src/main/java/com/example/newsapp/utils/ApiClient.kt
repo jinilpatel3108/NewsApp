@@ -1,6 +1,5 @@
 package com.example.newsapp.utils
 
-import com.example.newsapp.model.News
 import com.example.newsapp.model.Response
 import retrofit2.Call
 import retrofit2.Retrofit

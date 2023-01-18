@@ -2,12 +2,9 @@ package com.example.newsapp.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import com.example.newsapp.R
-import com.example.newsapp.databinding.ActivityMainBinding
 import com.example.newsapp.databinding.ActivitySingleNewsBinding
 
 class SingleNews : AppCompatActivity(){
