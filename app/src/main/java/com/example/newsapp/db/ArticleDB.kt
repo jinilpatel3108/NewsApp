@@ -20,8 +20,6 @@ abstract class ArticleDB : RoomDatabase(){
 
         operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
             instance ?: createDatabase(context).also{instance = it}
-
-
         }
 
         private fun createDatabase(context: Context) =

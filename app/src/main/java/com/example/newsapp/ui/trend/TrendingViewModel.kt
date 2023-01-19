@@ -1,14 +1,16 @@
 package com.example.newsapp.ui.trend
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.newsapp.db.ArticleDB
+import com.example.newsapp.db.NewsRepository
+import com.example.newsapp.model.News
 
-class TrendingViewModel : ViewModel() {
+class TrendingViewModel(application: Application) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Trend Fragment"
-    }
 
-    val text: LiveData<String> = _text
+
 }

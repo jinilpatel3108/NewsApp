@@ -29,4 +29,7 @@ class ApiClient {
 public interface APIInterface {
     @GET("top-headlines")
     fun getLatestNews(@Query("country") source: String, @Query("apiKey") apiKey:String) : Call<Response>
+
+    @GET("everything")
+    fun getSearchedNews(@Query("q") source: String, @Query("apiKey") apiKey:String) : Call<Response>
 }

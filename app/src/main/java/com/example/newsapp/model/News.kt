@@ -8,8 +8,6 @@ import kotlinx.serialization.Serializable
 
 @Entity(
     tableName = "news_db"
-
-
 )
 
 @Serializable
@@ -25,7 +23,6 @@ data class News(
 )
 
 data class Source(
-
     @SerializedName("name")
     val name: String
 )

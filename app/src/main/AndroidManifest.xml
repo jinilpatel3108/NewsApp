@@ -30,7 +30,7 @@
                 android:value="" />
         </activity>
 
-        <activity android:name=".ui.SingleNews"/>
+        <activity android:name=".SingleNews"/>
     </application>
 
 

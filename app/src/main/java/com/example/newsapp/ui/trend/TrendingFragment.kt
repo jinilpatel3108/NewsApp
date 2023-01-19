@@ -17,7 +17,7 @@ import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentTrendingBinding
 import com.example.newsapp.model.News
 import com.example.newsapp.model.Response
-import com.example.newsapp.ui.SingleNews
+import com.example.newsapp.SingleNews
 import com.example.newsapp.utils.APIInterface
 import com.example.newsapp.utils.ApiClient
 import com.example.newsapp.utils.Utils
@@ -63,7 +63,6 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchData() {
-        val BASE_URL = "https://newsapi.org/v2/top-headlines?country=in&apiKey=66ac55a588a94186be5858f7672344fb"
 
         val apiService: APIInterface = ApiClient.getClient().create<APIInterface>(APIInterface::class.java)
 
@@ -89,7 +88,14 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
     override fun onItemClicked(item: News) {
         val intent = Intent(context, SingleNews::class.java)
+        intent.putExtra("Id", item.id)
+        intent.putExtra("Title", item.title)
+        intent.putExtra("Description", item.description)
+        intent.putExtra("name", item.source.name)
+        intent.putExtra("publishedDate", item.publishedAt)
         intent.putExtra("UrlValue", item.url)
+        intent.putExtra("urlToImage", item.urlToImage)
+
         startActivity(intent)
     }
 }

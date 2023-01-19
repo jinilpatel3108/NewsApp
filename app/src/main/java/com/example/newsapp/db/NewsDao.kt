@@ -13,15 +13,12 @@ import com.example.newsapp.model.News
 interface NewsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateAndInsert(news: News): Long
+    suspend fun insertNews(news: News): Long
 
     @Query("SELECT * FROM news_db")
-    fun getAllArticles(): LiveData<List<News>>
+    fun getAllNews(): LiveData<List<News>>
 
     @Delete
-    suspend fun deleteArticle(news: News)
+    suspend fun deleteNews(news: News)
 
-
-
-//} NewsDao {
 }

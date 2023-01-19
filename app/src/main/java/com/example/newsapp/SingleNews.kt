@@ -1,9 +1,12 @@
-package com.example.newsapp.ui
+package com.example.newsapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.newsapp.databinding.ActivitySingleNewsBinding
@@ -13,7 +16,7 @@ class SingleNews : AppCompatActivity(){
     private lateinit var binding: ActivitySingleNewsBinding
 
     private lateinit var webview: WebView
-
+    private lateinit var ss : String
 
     private lateinit var toolbar: Toolbar
 
@@ -21,7 +24,7 @@ class SingleNews : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val ss:String = intent.getStringExtra("UrlValue").toString()
+        ss = intent.getStringExtra("UrlValue").toString()
 
         binding = ActivitySingleNewsBinding.inflate(layoutInflater)
 
@@ -33,8 +36,6 @@ class SingleNews : AppCompatActivity(){
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-
 
         webview.settings.javaScriptEnabled = true
 
@@ -49,6 +50,25 @@ class SingleNews : AppCompatActivity(){
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.single_news_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.navigation_save -> {
+                saveData()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun saveData() {
+        Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show()
     }
 
 }
