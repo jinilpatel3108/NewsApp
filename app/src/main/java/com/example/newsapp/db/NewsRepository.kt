@@ -2,17 +2,15 @@ package com.example.newsapp.db
 
 import androidx.lifecycle.LiveData
 import com.example.newsapp.model.News
+import retrofit2.Retrofit
 
-class NewsRepository(private val newsDao: NewsDao) {
+class NewsRepository (
 
-    val allNews : LiveData<List<News>> = newsDao.getAllNews()
+    val newsDao: NewsDao
+)
+{
+    val allnews: LiveData<List<News>> = newsDao.getAllNews()
+    suspend fun insert(news: News) = newsDao.insertNews(news)
 
-    suspend fun insert(news: News) {
-        newsDao.insertNews(news)
-    }
-
-    suspend fun delete(news: News) {
-        newsDao.deleteNews(news)
-    }
 
 }

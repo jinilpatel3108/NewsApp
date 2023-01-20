@@ -12,14 +12,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class News(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null,
     val title: String,
     val description: String,
     val source: Source,
     val publishedAt: String,
     @SerialName("urlToImage") val urlToImage: String,
-    val url: String
+    val url: String,
+
+    @PrimaryKey(autoGenerate = true)
+    var id: Int=0
 )
 
 data class Source(

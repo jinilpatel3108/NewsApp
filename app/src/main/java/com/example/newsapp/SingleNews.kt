@@ -10,6 +10,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.newsapp.databinding.ActivitySingleNewsBinding
+import com.example.newsapp.db.ArticleDB
+import com.example.newsapp.model.News
+import com.example.newsapp.model.Source
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class SingleNews : AppCompatActivity(){
 
@@ -68,7 +74,22 @@ class SingleNews : AppCompatActivity(){
     }
 
     private fun saveData() {
-        Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show()
+//        val usrinfo = News(","jinil",Source("jinil"),"20-01-2023","patel","idj")
+
+        val usrinfo = News(
+            intent.getStringExtra("Title").toString(),
+            intent.getStringExtra("Description").toString(),
+            Source(intent.getStringExtra("name").toString()),
+            intent.getStringExtra("publishedDate").toString(),
+            intent.getStringExtra("urlToImage").toString(),
+            ss
+        )
+
+        GlobalScope.launch(Dispatchers.IO) {
+            ArticleDB.getInstance(this@SingleNews).getArticleDao().insertNews(usrinfo)
+        }
     }
 
 }
+

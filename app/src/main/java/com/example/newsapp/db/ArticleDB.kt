@@ -16,18 +16,22 @@ abstract class ArticleDB : RoomDatabase(){
 
     companion object{
         private var instance: ArticleDB? = null
-        private val LOCK = Any()
+//        private val LOCK = Any()
 
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
-            instance ?: createDatabase(context).also{instance = it}
+//        operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
+//            instance ?: createDatabase(context).also{instance = it}
+//        }
+        fun getInstance(context: Context): ArticleDB{
+            if(instance==null){
+                instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    ArticleDB::class.java,
+                    "article_db.db"
+                ).fallbackToDestructiveMigration().build()
+            }
+            return instance!!
         }
 
-        private fun createDatabase(context: Context) =
-            Room.databaseBuilder(
-                context.applicationContext,
-                ArticleDB::class.java,
-                "article_db.db"
-            ).build()
     }
 
 }

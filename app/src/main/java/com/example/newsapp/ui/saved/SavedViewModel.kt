@@ -18,9 +18,9 @@ class SavedViewModel(activity: Activity): ViewModel() {
     private var repository: NewsRepository
 
     init {
-        val dao = ArticleDB.invoke(activity.application).getArticleDao()
+        val dao = ArticleDB.getInstance(activity.application).getArticleDao()
         repository = NewsRepository(dao)
-        allNews = repository.allNews
+        allNews = repository.allnews
     }
 
     fun insertNews(news: News) = viewModelScope.launch(Dispatchers.IO) {
@@ -28,7 +28,7 @@ class SavedViewModel(activity: Activity): ViewModel() {
     }
 
     fun deleteNews(news: News) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(news)
+        repository.newsDao
     }
 
 }

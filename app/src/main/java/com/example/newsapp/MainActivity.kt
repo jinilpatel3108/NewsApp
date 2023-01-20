@@ -9,12 +9,22 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.newsapp.databinding.ActivityMainBinding
+import com.example.newsapp.db.ArticleDB
+import com.example.newsapp.model.News
+import com.example.newsapp.model.Source
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var toolbar: Toolbar
 
     private lateinit var binding: ActivityMainBinding
+
+    lateinit var database: ArticleDB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +35,18 @@ class MainActivity : AppCompatActivity() {
         toolbar = binding.toolbar
 
         setSupportActionBar(toolbar)
+
+//        database = Room.databaseBuilder(applicationContext,ArticleDB::class.java,"article_db").build()
+//
+//        database = ArticleDB.
+//        GlobalScope.launch{
+//            database.getArticleDao().insertNews(News(1,"jinil","patel", Source("jinil"),"19-01-2023","abc","patel"))
+//        }
+//        val usrinfo = News(1,"jinil","jinil",Source("jinil"),"20-01-2023","patel","idj")
+//        GlobalScope.launch(Dispatchers.IO) {
+//            ArticleDB.getInstance(this@MainActivity).getArticleDao().insertNews(usrinfo)
+//        }
+
 
         val navView: BottomNavigationView = binding.navView
 
