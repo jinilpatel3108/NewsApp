@@ -16,11 +16,7 @@ abstract class ArticleDB : RoomDatabase(){
 
     companion object{
         private var instance: ArticleDB? = null
-//        private val LOCK = Any()
 
-//        operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
-//            instance ?: createDatabase(context).also{instance = it}
-//        }
         fun getInstance(context: Context): ArticleDB{
             if(instance==null){
                 instance = Room.databaseBuilder(
@@ -31,7 +27,5 @@ abstract class ArticleDB : RoomDatabase(){
             }
             return instance!!
         }
-
     }
-
 }

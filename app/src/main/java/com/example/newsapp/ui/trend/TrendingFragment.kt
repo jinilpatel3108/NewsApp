@@ -7,11 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newsapp.R
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentTrendingBinding
@@ -31,8 +36,10 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
     private val binding get() = _binding!!
 
+    private var selectedCategory: String = "All"
+    private var selectedCountry: String = "in"
+
     private lateinit var mAdapter: NewsAdapter
-    private lateinit var webView: WebView
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -40,19 +47,61 @@ class TrendingFragment : Fragment(), NewsItemClicked{
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //temp
-        val trendViewModel = ViewModelProvider(this).get(TrendingViewModel::class.java)
         _binding = FragmentTrendingBinding.inflate(inflater, container, false)
 
+//        Initialization of variables.
         val root: View = binding.root
         val recyclerView: RecyclerView = binding.newsRecycler
+        val categorySpinner: Spinner = binding.categryDropDwn
+        val countrySpinner: Spinner = binding.countryDropDwn
+        val categories = resources.getStringArray(R.array.category_array)
+        val countries = resources.getStringArray(R.array.country_array)
 
+//        Setting of Recycler View.
         recyclerView.layoutManager = LinearLayoutManager(context)
-
         fetchData()
         mAdapter = NewsAdapter(this)
-
         recyclerView.adapter =mAdapter
+
+//         Category Spinner.
+        val adapter = context?.let {
+            ArrayAdapter(it, android.R.layout.simple_spinner_item, categories)
+        }
+        categorySpinner.adapter = adapter
+
+        categorySpinner.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>,
+                                        view: View?, position: Int, id: Long) {
+                selectedCategory = categories[position]
+                fetchData()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // write code to perform some action
+            }
+        }
+
+
+//        Country Spinner.
+        val countryAdapter = context?.let {
+            ArrayAdapter(it, android.R.layout.simple_spinner_item, countries)
+        }
+        countrySpinner.adapter = countryAdapter
+
+        countrySpinner.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>,
+                                        view: View?, position: Int, id: Long) {
+                selectedCountry = Utils.countryMap[countries[position]].toString()
+                fetchData()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // write code to perform some action
+            }
+        }
+
         return root
     }
 
@@ -66,8 +115,16 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
         val apiService: APIInterface = ApiClient.getClient().create<APIInterface>(APIInterface::class.java)
 
-        val call : Call<Response> = apiService.getLatestNews("in",Utils.API_KEY);
+        val call: Call<Response>
 
+        if(selectedCategory=="All")
+        {
+            call = apiService.getLatestNewsByCountry(selectedCountry, Utils.API_KEY);
+        }
+        else
+        {
+            call = apiService.getLatestNewsByCategoryAndCountry(selectedCategory, selectedCountry, Utils.API_KEY);
+        }
 
         call.enqueue(object: Callback<Response> {
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {

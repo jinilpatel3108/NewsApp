@@ -74,8 +74,6 @@ class SingleNews : AppCompatActivity(){
     }
 
     private fun saveData() {
-//        Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show()
-//        val usrinfo = News(","jinil",Source("jinil"),"20-01-2023","patel","idj")
 
         val usrinfo = News(
             intent.getStringExtra("Title").toString(),
