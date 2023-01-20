@@ -11,14 +11,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class SavedViewModel(activity: Activity): ViewModel() {
+class SavedViewModel(application: Application): AndroidViewModel(application) {
     // TODO: Implement the ViewModel
 
     var allNews : LiveData<List<News>>
     private var repository: NewsRepository
 
     init {
-        val dao = ArticleDB.getInstance(activity.application).getArticleDao()
+        val dao = ArticleDB.getInstance(application).getArticleDao()
         repository = NewsRepository(dao)
         allNews = repository.allnews
     }
