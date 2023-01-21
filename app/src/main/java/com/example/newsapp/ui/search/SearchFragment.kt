@@ -92,7 +92,6 @@ class SearchFragment : Fragment() , NewsItemClicked{
 
     override fun onItemClicked(item: News) {
         val intent = Intent(context, SingleNews::class.java)
-        intent.putExtra("Id", item.id)
         intent.putExtra("Title", item.title)
         intent.putExtra("Description", item.description)
         intent.putExtra("name", item.source.name)

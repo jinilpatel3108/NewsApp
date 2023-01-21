@@ -17,10 +17,7 @@ data class News(
     val source: Source,
     val publishedAt: String,
     @SerialName("urlToImage") val urlToImage: String,
-    val url: String,
-
-    @PrimaryKey(autoGenerate = true)
-    var id: Int=0
+    @PrimaryKey val url: String,
 )
 
 data class Source(

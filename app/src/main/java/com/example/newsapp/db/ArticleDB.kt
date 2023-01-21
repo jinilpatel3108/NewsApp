@@ -6,7 +6,7 @@ import com.example.newsapp.model.News
 
 @Database(
     entities = [News::class],
-    version = 3
+    version = 4
 )
 @TypeConverters(Converters::class)
 
