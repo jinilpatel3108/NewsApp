@@ -1,6 +1,7 @@
 package com.example.newsapp.ui.trend
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ import com.example.newsapp.SingleNews
 import com.example.newsapp.utils.APIInterface
 import com.example.newsapp.utils.ApiClient
 import com.example.newsapp.utils.Utils
+import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import retrofit2.Call
 import retrofit2.Callback
 
@@ -44,6 +46,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         _binding = FragmentTrendingBinding.inflate(inflater, container, false)
 
 //        Initialization of variables.
@@ -53,6 +56,16 @@ class TrendingFragment : Fragment(), NewsItemClicked{
         val countrySpinner: Spinner = binding.countryDropDwn
         val categories = resources.getStringArray(R.array.category_array)
         val countries = resources.getStringArray(R.array.country_array)
+
+        val prog: CircularProgressBar = binding.progressCircular
+
+        prog.apply {
+            progressMax = 100f
+            setProgressWithAnimation(100f,500)
+            progressBarWidth = 5f
+            backgroundProgressBarWidth = 2f
+            progressBarColor = Color.BLUE
+        }
 
 //        Setting of Recycler View.
         recyclerView.layoutManager = LinearLayoutManager(context)
