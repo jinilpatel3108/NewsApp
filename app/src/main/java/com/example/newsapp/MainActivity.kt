@@ -1,5 +1,6 @@
 package com.example.newsapp
 
+import android.graphics.Color
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import com.example.newsapp.databinding.ActivityMainBinding
 import com.example.newsapp.db.ArticleDB
 import com.example.newsapp.model.News
 import com.example.newsapp.model.Source
+import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
@@ -35,6 +37,16 @@ class MainActivity : AppCompatActivity() {
         toolbar = binding.toolbar
 
         setSupportActionBar(toolbar)
+
+        val prog: CircularProgressBar = binding.progressCircular
+
+        prog.apply {
+            progressMax = 100f
+            setProgressWithAnimation(100f,1000)
+            progressBarWidth = 5f
+            backgroundProgressBarWidth = 2f
+            progressBarColor = Color.GREEN
+        }
 
 //        database = Room.databaseBuilder(applicationContext,ArticleDB::class.java,"article_db").build()
 //
