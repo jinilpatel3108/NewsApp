@@ -38,15 +38,15 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        val prog: CircularProgressBar = binding.progressCircular
-
-        prog.apply {
-            progressMax = 100f
-            setProgressWithAnimation(100f,500)
-            progressBarWidth = 5f
-            backgroundProgressBarWidth = 2f
-            progressBarColor = Color.BLACK
-        }
+//        val prog: CircularProgressBar = binding.progressCircular
+//
+//        prog.apply {
+//            progressMax = 100f
+//            setProgressWithAnimation(1000f,2500)
+//            progressBarWidth = 5f
+//            backgroundProgressBarWidth = 2f
+//            progressBarColor = Color.BLUE
+//        }
 
 //        database = Room.databaseBuilder(applicationContext,ArticleDB::class.java,"article_db").build()
 //
