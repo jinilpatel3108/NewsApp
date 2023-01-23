@@ -42,10 +42,10 @@ class MainActivity : AppCompatActivity() {
 
         prog.apply {
             progressMax = 100f
-            setProgressWithAnimation(100f,1000)
+            setProgressWithAnimation(100f,500)
             progressBarWidth = 5f
             backgroundProgressBarWidth = 2f
-            progressBarColor = Color.GREEN
+            progressBarColor = Color.BLACK
         }
 
 //        database = Room.databaseBuilder(applicationContext,ArticleDB::class.java,"article_db").build()
