@@ -9,6 +9,9 @@
     <string name="description_news_demo">Description (Max 4 lines)</string>
     <string name="sources">Sources</string>
     <string name="date_news">Published date</string>
+    <string name="logo">Logo</string>
+    <string name="image_news">Image News</string>
+    <string name="search">Search</string>
 
     <string-array name="category_array">
         <item>All</item>

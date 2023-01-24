@@ -48,7 +48,7 @@ class SearchFragment : Fragment() , NewsItemClicked{
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onQueryTextSubmit(query: String?): Boolean {
                 fetchData(query)
-                return false;
+                return false
             }
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -64,14 +64,13 @@ class SearchFragment : Fragment() , NewsItemClicked{
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchData(query: String?) {
         val apiService: APIInterface = ApiClient.getClient().create(APIInterface::class.java)
-        val call : Call<Response>? = query?.let { apiService.getSearchedNews(it, Utils.API_KEY) };
+        val call : Call<Response>? = query?.let { apiService.getSearchedNews(it, Utils.API_KEY) }
 
         call?.enqueue(object: Callback<Response> {
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
 
                 if(response.body()?.status.equals("ok")) {
-                    println("Array: "+ response.body()!!.news)
-                    val articleList : List<News> = response.body()!!.news;
+                    val articleList : List<News> = response.body()!!.news
                     if(articleList.isNotEmpty()) {
                         mAdapter.updateNews(articleList)
                     }
@@ -79,7 +78,6 @@ class SearchFragment : Fragment() , NewsItemClicked{
             }
 
             override fun onFailure(call: Call<Response>, t: Throwable) {
-                println("Array: Error")
             }
         })
     }

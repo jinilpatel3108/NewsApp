@@ -1,7 +1,6 @@
 package com.example.newsapp.ui.trend
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +11,6 @@ import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.Spinner
 import androidx.annotation.RequiresApi
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +24,6 @@ import com.example.newsapp.SingleNews
 import com.example.newsapp.utils.APIInterface
 import com.example.newsapp.utils.ApiClient
 import com.example.newsapp.utils.Utils
-import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import retrofit2.Call
 import retrofit2.Callback
 
@@ -37,10 +33,8 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     private var _binding: FragmentTrendingBinding? = null
     private lateinit var prog: ProgressBar
     private val binding get() = _binding!!
-
     private var selectedCategory: String = "All"
     private var selectedCountry: String = "in"
-
     private lateinit var mAdapter: NewsAdapter
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -52,7 +46,6 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
         _binding = FragmentTrendingBinding.inflate(inflater, container, false)
 
-//        Initialization of variables.
         val root: View = binding.root
         val recyclerView: RecyclerView = binding.newsRecycler
         val categorySpinner: Spinner = binding.categryDropDwn
@@ -61,28 +54,11 @@ class TrendingFragment : Fragment(), NewsItemClicked{
         val countries = resources.getStringArray(R.array.country_array)
         prog = binding.progressCircular
 
-
-//        prog.apply {
-//            isVisible = true
-//            progressMax = 100f
-//            setProgressWithAnimation(100f,500)
-//            progressBarWidth = 5f
-//            backgroundProgressBarWidth = 2f
-//            progressBarColor = Color.BLUE
-//
-//        }
-//        prog.visibility = View.VISIBLE
-
-//        prog.visibility = View.INVISIBLE
-
-
-//        Setting of Recycler View.
         recyclerView.layoutManager = LinearLayoutManager(context)
         fetchData()
         mAdapter = NewsAdapter(this)
         recyclerView.adapter =mAdapter
 
-//         Category Spinner.
         val adapter = context?.let {
             ArrayAdapter(it, android.R.layout.simple_spinner_item, categories)
         }
@@ -97,12 +73,9 @@ class TrendingFragment : Fragment(), NewsItemClicked{
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // write code to perform some action
             }
         }
 
-
-//        Country Spinner.
         val countryAdapter = context?.let {
             ArrayAdapter(it, android.R.layout.simple_spinner_item, countries)
         }
@@ -117,7 +90,6 @@ class TrendingFragment : Fragment(), NewsItemClicked{
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // write code to perform some action
             }
         }
 
@@ -133,25 +105,18 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     private fun fetchData() {
 
         prog.visibility = View.VISIBLE
-
-        val apiService: APIInterface = ApiClient.getClient().create<APIInterface>(APIInterface::class.java)
-
-        val call: Call<Response>
-
-        if(selectedCategory=="All")
-        {
-            call = apiService.getLatestNewsByCountry(selectedCountry, Utils.API_KEY);
-        }
-        else
-        {
-            call = apiService.getLatestNewsByCategoryAndCountry(selectedCategory, selectedCountry, Utils.API_KEY);
+        val apiService: APIInterface = ApiClient.getClient().create(APIInterface::class.java)
+        val call: Call<Response> = if(selectedCategory=="All") {
+            apiService.getLatestNewsByCountry(selectedCountry, Utils.API_KEY)
+        } else {
+            apiService.getLatestNewsByCategoryAndCountry(selectedCategory, selectedCountry, Utils.API_KEY)
         }
 
         call.enqueue(object: Callback<Response> {
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
 
                 if(response.body()?.status.equals("ok")) {
-                    val articleList : List<News> = response.body()!!.news;
+                    val articleList : List<News> = response.body()!!.news
                     if(articleList.isNotEmpty()) {
                         mAdapter.updateNews(articleList)
                         prog.visibility = View.INVISIBLE
@@ -160,7 +125,6 @@ class TrendingFragment : Fragment(), NewsItemClicked{
             }
 
             override fun onFailure(call: Call<Response>, t: Throwable) {
-                println("Array: Error")
             }
         })
     }

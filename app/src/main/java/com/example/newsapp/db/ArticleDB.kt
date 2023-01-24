@@ -9,16 +9,15 @@ import com.example.newsapp.model.News
     version = 4
 )
 @TypeConverters(Converters::class)
-
-abstract class ArticleDB : RoomDatabase(){
+abstract class ArticleDB : RoomDatabase() {
 
     abstract fun getArticleDao(): NewsDao
 
-    companion object{
+    companion object {
         private var instance: ArticleDB? = null
 
-        fun getInstance(context: Context): ArticleDB{
-            if(instance==null){
+        fun getInstance(context: Context): ArticleDB {
+            if(instance==null) {
                 instance = Room.databaseBuilder(
                     context.applicationContext,
                     ArticleDB::class.java,

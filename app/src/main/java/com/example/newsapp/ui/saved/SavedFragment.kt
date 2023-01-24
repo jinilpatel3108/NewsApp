@@ -1,14 +1,15 @@
 package com.example.newsapp.ui.saved
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newsapp.SingleNews
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentSavedBinding
@@ -36,11 +37,10 @@ class SavedFragment : Fragment(), NewsItemClicked {
         recyclerView.adapter = mAdapter
 
         val savedViewModel = ViewModelProvider(this,
-        ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(SavedViewModel::class.java)
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[SavedViewModel::class.java]
 
         savedViewModel.allNews.observe(viewLifecycleOwner, Observer {list ->
             list?.let {
-                println("Hello")
                 mAdapter.updateNews(it)
             }
         })
@@ -53,7 +53,15 @@ class SavedFragment : Fragment(), NewsItemClicked {
     }
 
     override fun onItemClicked(item: News) {
-        TODO("Not yet implemented")
+        val intent = Intent(context, SingleNews::class.java)
+        intent.putExtra("Title", item.title)
+        intent.putExtra("Description", item.description)
+        intent.putExtra("name", item.source.name)
+        intent.putExtra("publishedDate", item.publishedAt)
+        intent.putExtra("UrlValue", item.url)
+        intent.putExtra("urlToImage", item.urlToImage)
+
+        startActivity(intent)
     }
 
 }

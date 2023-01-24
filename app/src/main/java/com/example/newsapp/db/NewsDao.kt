@@ -8,10 +8,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.newsapp.model.News
 
-
 @Dao
 interface NewsDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNews(news: News): Long
 
@@ -20,5 +18,4 @@ interface NewsDao {
 
     @Delete
     suspend fun deleteNews(news: News)
-
 }

@@ -6,13 +6,13 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.newsapp.databinding.ActivitySingleNewsBinding
 import com.example.newsapp.db.ArticleDB
 import com.example.newsapp.model.News
 import com.example.newsapp.model.Source
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -73,9 +73,10 @@ class SingleNews : AppCompatActivity(){
         return super.onOptionsItemSelected(item)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun saveData() {
 
-        val usrinfo = News(
+        val userInfo = News(
             intent.getStringExtra("Title").toString(),
             intent.getStringExtra("Description").toString(),
             Source(intent.getStringExtra("name").toString()),
@@ -85,7 +86,7 @@ class SingleNews : AppCompatActivity(){
         )
 
         GlobalScope.launch(Dispatchers.IO) {
-            ArticleDB.getInstance(this@SingleNews).getArticleDao().insertNews(usrinfo)
+            ArticleDB.getInstance(this@SingleNews).getArticleDao().insertNews(userInfo)
         }
     }
 

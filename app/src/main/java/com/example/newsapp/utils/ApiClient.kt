@@ -10,23 +10,21 @@ import retrofit2.http.Query
 class ApiClient {
 
     companion object {
-        public val BASE_URL : String = "https://newsapi.org/v2/"
+        private const val BASE_URL : String = "https://newsapi.org/v2/"
         private val retrofit : Retrofit? = null
 
-        public fun getClient(): Retrofit {
+        fun getClient(): Retrofit {
 
             if (retrofit==null) {
                 return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
                     .build()
             }
-            return retrofit;
+            return retrofit
         }
-
     }
-
 }
 
-public interface APIInterface {
+interface APIInterface {
 
     @GET("top-headlines")
     fun getLatestNewsByCountry(@Query("country") source: String, @Query("apiKey") apiKey:String) : Call<Response>
