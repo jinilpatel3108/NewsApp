@@ -39,11 +39,14 @@
 
     </LinearLayout>
 
-    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+    <ProgressBar
         android:id="@+id/progress_circular"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
+        android:indeterminate="false"
+        android:visibility="invisible"
+
         />
 
 

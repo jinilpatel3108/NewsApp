@@ -9,8 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
 import android.widget.Spinner
 import androidx.annotation.RequiresApi
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +35,7 @@ import retrofit2.Callback
 class TrendingFragment : Fragment(), NewsItemClicked{
 
     private var _binding: FragmentTrendingBinding? = null
-
+    private lateinit var prog: ProgressBar
     private val binding get() = _binding!!
 
     private var selectedCategory: String = "All"
@@ -56,16 +59,22 @@ class TrendingFragment : Fragment(), NewsItemClicked{
         val countrySpinner: Spinner = binding.countryDropDwn
         val categories = resources.getStringArray(R.array.category_array)
         val countries = resources.getStringArray(R.array.country_array)
+        prog = binding.progressCircular
 
-        val prog: CircularProgressBar = binding.progressCircular
 
-        prog.apply {
-            progressMax = 100f
-            setProgressWithAnimation(100f,500)
-            progressBarWidth = 5f
-            backgroundProgressBarWidth = 2f
-            progressBarColor = Color.BLUE
-        }
+//        prog.apply {
+//            isVisible = true
+//            progressMax = 100f
+//            setProgressWithAnimation(100f,500)
+//            progressBarWidth = 5f
+//            backgroundProgressBarWidth = 2f
+//            progressBarColor = Color.BLUE
+//
+//        }
+//        prog.visibility = View.VISIBLE
+
+//        prog.visibility = View.INVISIBLE
+
 
 //        Setting of Recycler View.
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -123,6 +132,8 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchData() {
 
+        prog.visibility = View.VISIBLE
+
         val apiService: APIInterface = ApiClient.getClient().create<APIInterface>(APIInterface::class.java)
 
         val call: Call<Response>
@@ -143,6 +154,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
                     val articleList : List<News> = response.body()!!.news;
                     if(articleList.isNotEmpty()) {
                         mAdapter.updateNews(articleList)
+                        prog.visibility = View.INVISIBLE
                     }
                 }
             }
