@@ -5,5 +5,4 @@ import com.example.newsapp.model.News
 
 class NewsRepository (val newsDao: NewsDao) {
     val allnews: LiveData<List<News>> = newsDao.getAllNews()
-    suspend fun insert(news: News) = newsDao.insertNews(news)
 }
