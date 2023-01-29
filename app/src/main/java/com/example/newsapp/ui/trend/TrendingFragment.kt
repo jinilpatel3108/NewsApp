@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import android.widget.Spinner
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -125,6 +122,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
             }
 
             override fun onFailure(call: Call<Response>, t: Throwable) {
+                Toast.makeText(context, "News Can't be Fetched!!", Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.newsapp.databinding.ActivitySingleNewsBinding
@@ -86,7 +87,17 @@ class SingleNews : AppCompatActivity(){
         )
 
         GlobalScope.launch(Dispatchers.IO) {
-            ArticleDB.getInstance(this@SingleNews).getArticleDao().insertNews(userInfo)
+            val result = ArticleDB.getInstance(this@SingleNews).
+            getArticleDao().insertNews(userInfo)
+
+            if(result>0)
+            {
+                Toast.makeText(this@SingleNews,"Saved Successfully", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                Toast.makeText(this@SingleNews,"Error Occurred", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

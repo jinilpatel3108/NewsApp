@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -78,6 +79,7 @@ class SearchFragment : Fragment() , NewsItemClicked{
             }
 
             override fun onFailure(call: Call<Response>, t: Throwable) {
+                Toast.makeText(context, "News Can't be Fetched!!", Toast.LENGTH_SHORT).show()
             }
         })
     }
