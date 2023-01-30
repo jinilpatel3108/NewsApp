@@ -16,6 +16,7 @@ import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentSearchBinding
 import com.example.newsapp.model.News
 import com.example.newsapp.model.Response
+import com.example.newsapp.ui.saved.SavedFragment
 import com.example.newsapp.utils.APIInterface
 import com.example.newsapp.utils.ApiClient
 import com.example.newsapp.utils.Utils
@@ -29,6 +30,8 @@ class SearchFragment : Fragment() , NewsItemClicked{
     private val binding get() = _binding!!
 
     private lateinit var mAdapter: NewsAdapter
+
+    private lateinit var searchView: SearchView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,13 +41,24 @@ class SearchFragment : Fragment() , NewsItemClicked{
 
         val root: View = binding.root
         val recyclerView: RecyclerView = binding.newsRecyclerSearched
-        val searchView: SearchView = binding.searchBar
+        searchView = binding.searchBar
 
+        recyclerViewAdapter(recyclerView)
+
+        searchViewMethod(searchView)
+
+        return root
+    }
+    private fun recyclerViewAdapter(recyclerView: RecyclerView){
         recyclerView.layoutManager = LinearLayoutManager(context)
-
         mAdapter = NewsAdapter(this)
         recyclerView.adapter =mAdapter
 
+
+
+    }
+
+    private fun searchViewMethod(searchView: SearchView){
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -58,8 +72,6 @@ class SearchFragment : Fragment() , NewsItemClicked{
             }
 
         })
-
-        return root
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

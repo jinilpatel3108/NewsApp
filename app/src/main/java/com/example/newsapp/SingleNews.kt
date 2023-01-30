@@ -2,6 +2,9 @@ package com.example.newsapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
@@ -18,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.Serializable
+import java.util.logging.Level.INFO
 
 class SingleNews : AppCompatActivity(){
 
@@ -84,15 +88,10 @@ class SingleNews : AppCompatActivity(){
         GlobalScope.launch(Dispatchers.IO) {
             val result = ArticleDB.getInstance(this@SingleNews).
             getArticleDao().insertNews(userInfo)
+            Handler(Looper.getMainLooper()).post{
+                Toast.makeText(this@SingleNews, "News Saved", Toast.LENGTH_LONG).show()
+            }
 
-            if(result>0)
-            {
-                Toast.makeText(this@SingleNews,"Saved Successfully", Toast.LENGTH_SHORT).show()
-            }
-            else
-            {
-                Toast.makeText(this@SingleNews,"Error Occurred", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 

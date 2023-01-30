@@ -32,10 +32,19 @@ class SavedFragment : Fragment(), NewsItemClicked {
         val root: View = binding.root
         val recyclerView: RecyclerView = binding.newsRecyclerSaved
 
+        recyclerViewAdapter(recyclerView)
+
+        return root
+    }
+
+    private fun recyclerViewAdapter(recyclerView: RecyclerView){
         recyclerView.layoutManager = LinearLayoutManager(context)
         val mAdapter = NewsAdapter(this)
         recyclerView.adapter = mAdapter
+        saveViewModel(mAdapter)
+    }
 
+    private fun saveViewModel(mAdapter: NewsAdapter){
         val savedViewModel = ViewModelProvider(this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[SavedViewModel::class.java]
 
@@ -44,7 +53,6 @@ class SavedFragment : Fragment(), NewsItemClicked {
                 mAdapter.updateNews(it)
             }
         })
-        return root
     }
 
     override fun onDestroyView() {

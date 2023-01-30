@@ -45,24 +45,46 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
         val root: View = binding.root
         val recyclerView: RecyclerView = binding.newsRecycler
-        val categorySpinner: Spinner = binding.categryDropDwn
-        val countrySpinner: Spinner = binding.countryDropDwn
-        val categories = resources.getStringArray(R.array.category_array)
-        val countries = resources.getStringArray(R.array.country_array)
+        var categorySpinner: Spinner = binding.categryDropDwn
+        var countrySpinner: Spinner = binding.countryDropDwn
+
         prog = binding.progressCircular
 
+        recyclerViewAdapter(recyclerView)
+
+        categorySpinnerMethod(categorySpinner)
+
+        countrySpinnerMethod(countrySpinner)
+
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun recyclerViewAdapter(recyclerView: RecyclerView){
         recyclerView.layoutManager = LinearLayoutManager(context)
         fetchData()
         mAdapter = NewsAdapter(this)
         recyclerView.adapter =mAdapter
+    }
+
+    private fun categorySpinnerMethod(categorySpinner: Spinner){
+
+        val categories = resources.getStringArray(R.array.category_array)
 
         val adapter = context?.let {
             ArrayAdapter(it, android.R.layout.simple_spinner_item, categories)
         }
+
         categorySpinner.adapter = adapter
 
         categorySpinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View?, position: Int, id: Long) {
                 selectedCategory = categories[position]
@@ -72,7 +94,10 @@ class TrendingFragment : Fragment(), NewsItemClicked{
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
         }
+    }
 
+    private fun countrySpinnerMethod(countrySpinner: Spinner) {
+        val countries = resources.getStringArray(R.array.country_array)
         val countryAdapter = context?.let {
             ArrayAdapter(it, android.R.layout.simple_spinner_item, countries)
         }
@@ -80,6 +105,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
         countrySpinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View?, position: Int, id: Long) {
                 selectedCountry = Utils.countryMap[countries[position]].toString()
@@ -89,13 +115,6 @@ class TrendingFragment : Fragment(), NewsItemClicked{
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
         }
-
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
