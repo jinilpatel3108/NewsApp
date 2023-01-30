@@ -129,13 +129,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
     override fun onItemClicked(item: News) {
         val intent = Intent(context, SingleNews::class.java)
-        intent.putExtra("Title", item.title)
-        intent.putExtra("Description", item.description)
-        intent.putExtra("name", item.source.name)
-        intent.putExtra("publishedDate", item.publishedAt)
-        intent.putExtra("UrlValue", item.url)
-        intent.putExtra("urlToImage", item.urlToImage)
-
+        intent.putExtra("News", item)
         startActivity(intent)
     }
 }
