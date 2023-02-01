@@ -2,6 +2,9 @@ package com.example.newsapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
@@ -13,16 +16,19 @@ import com.example.newsapp.databinding.ActivitySingleNewsBinding
 import com.example.newsapp.db.ArticleDB
 import com.example.newsapp.model.News
 import com.example.newsapp.model.Source
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.Serializable
+import java.util.logging.Level.INFO
 
 class SingleNews : AppCompatActivity(){
 
     private lateinit var binding: ActivitySingleNewsBinding
 
     private lateinit var webview: WebView
-    private lateinit var ss : String
+    private lateinit var urlValue : String
 
     private lateinit var toolbar: Toolbar
 
@@ -30,7 +36,8 @@ class SingleNews : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ss = intent.getStringExtra("UrlValue").toString()
+        val userInfo = intent.getSerializableExtra("News") as News
+        urlValue = userInfo.url
 
         binding = ActivitySingleNewsBinding.inflate(layoutInflater)
 
@@ -46,7 +53,7 @@ class SingleNews : AppCompatActivity(){
         webview.settings.javaScriptEnabled = true
 
         webview.apply {
-            loadUrl(ss)
+            loadUrl(urlValue)
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
         }
@@ -73,19 +80,18 @@ class SingleNews : AppCompatActivity(){
         return super.onOptionsItemSelected(item)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun saveData() {
 
-        val usrinfo = News(
-            intent.getStringExtra("Title").toString(),
-            intent.getStringExtra("Description").toString(),
-            Source(intent.getStringExtra("name").toString()),
-            intent.getStringExtra("publishedDate").toString(),
-            intent.getStringExtra("urlToImage").toString(),
-            ss
-        )
+        val userInfo = intent.getSerializableExtra("News") as News
 
         GlobalScope.launch(Dispatchers.IO) {
-            ArticleDB.getInstance(this@SingleNews).getArticleDao().insertNews(usrinfo)
+            val result = ArticleDB.getInstance(this@SingleNews).
+            getArticleDao().insertNews(userInfo)
+            Handler(Looper.getMainLooper()).post{
+                Toast.makeText(this@SingleNews, "News Saved", Toast.LENGTH_LONG).show()
+            }
+
         }
     }
 

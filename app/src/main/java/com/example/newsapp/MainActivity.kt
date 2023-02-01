@@ -1,32 +1,21 @@
 package com.example.newsapp
 
-import android.graphics.Color
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.newsapp.databinding.ActivityMainBinding
-import com.example.newsapp.db.ArticleDB
-import com.example.newsapp.model.News
-import com.example.newsapp.model.Source
-import com.mikhaellopez.circularprogressbar.CircularProgressBar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var toolbar: Toolbar
 
     private lateinit var binding: ActivityMainBinding
-
-    lateinit var database: ArticleDB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,36 +24,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         toolbar = binding.toolbar
-
         setSupportActionBar(toolbar)
-
-//        val prog: CircularProgressBar = binding.progressCircular
-//
-//        prog.apply {
-//            progressMax = 100f
-//            setProgressWithAnimation(1000f,2500)
-//            progressBarWidth = 5f
-//            backgroundProgressBarWidth = 2f
-//            progressBarColor = Color.BLUE
-//        }
-
-//        database = Room.databaseBuilder(applicationContext,ArticleDB::class.java,"article_db").build()
-//
-//        database = ArticleDB.
-//        GlobalScope.launch{
-//            database.getArticleDao().insertNews(News(1,"jinil","patel", Source("jinil"),"19-01-2023","abc","patel"))
-//        }
-//        val usrinfo = News(1,"jinil","jinil",Source("jinil"),"20-01-2023","patel","idj")
-//        GlobalScope.launch(Dispatchers.IO) {
-//            ArticleDB.getInstance(this@MainActivity).getArticleDao().insertNews(usrinfo)
-//        }
-
-
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+//        val navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_trend, R.id.navigation_saved, R.id.navigation_search

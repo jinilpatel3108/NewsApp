@@ -1,14 +1,15 @@
 package com.example.newsapp.ui.saved
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newsapp.SingleNews
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentSavedBinding
@@ -31,20 +32,27 @@ class SavedFragment : Fragment(), NewsItemClicked {
         val root: View = binding.root
         val recyclerView: RecyclerView = binding.newsRecyclerSaved
 
+        recyclerViewAdapter(recyclerView)
+
+        return root
+    }
+
+    private fun recyclerViewAdapter(recyclerView: RecyclerView){
         recyclerView.layoutManager = LinearLayoutManager(context)
         val mAdapter = NewsAdapter(this)
         recyclerView.adapter = mAdapter
+        saveViewModel(mAdapter)
+    }
 
+    private fun saveViewModel(mAdapter: NewsAdapter){
         val savedViewModel = ViewModelProvider(this,
-        ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(SavedViewModel::class.java)
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[SavedViewModel::class.java]
 
         savedViewModel.allNews.observe(viewLifecycleOwner, Observer {list ->
             list?.let {
-                println("Hello")
                 mAdapter.updateNews(it)
             }
         })
-        return root
     }
 
     override fun onDestroyView() {
@@ -53,7 +61,9 @@ class SavedFragment : Fragment(), NewsItemClicked {
     }
 
     override fun onItemClicked(item: News) {
-        TODO("Not yet implemented")
+        val intent = Intent(context, SingleNews::class.java)
+        intent.putExtra("News", item)
+        startActivity(intent)
     }
 
 }
