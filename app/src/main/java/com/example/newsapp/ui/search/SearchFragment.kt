@@ -26,9 +26,7 @@ import retrofit2.Callback
 class SearchFragment : Fragment() , NewsItemClicked{
 
     private var _binding: FragmentSearchBinding? = null
-
     private val binding get() = _binding!!
-
     private lateinit var mAdapter: NewsAdapter
 
     private lateinit var searchView: SearchView
@@ -44,7 +42,6 @@ class SearchFragment : Fragment() , NewsItemClicked{
         searchView = binding.searchBar
 
         recyclerViewAdapter(recyclerView)
-
         searchViewMethod(searchView)
 
         return root
@@ -53,9 +50,6 @@ class SearchFragment : Fragment() , NewsItemClicked{
         recyclerView.layoutManager = LinearLayoutManager(context)
         mAdapter = NewsAdapter(this)
         recyclerView.adapter =mAdapter
-
-
-
     }
 
     private fun searchViewMethod(searchView: SearchView){

@@ -9,30 +9,23 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.newsapp.R
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.data.NewsItemClicked
 import com.example.newsapp.databinding.FragmentTrendingBinding
 import com.example.newsapp.model.News
-import com.example.newsapp.model.Response
 import com.example.newsapp.SingleNews
-import com.example.newsapp.utils.APIInterface
-import com.example.newsapp.utils.ApiClient
 import com.example.newsapp.utils.Utils
-import retrofit2.Call
-import retrofit2.Callback
-
 
 class TrendingFragment : Fragment(), NewsItemClicked{
 
     private var _binding: FragmentTrendingBinding? = null
-    private lateinit var prog: ProgressBar
+    private lateinit var progressBar: ProgressBar
     private val binding get() = _binding!!
-    private var selectedCategory: String = "All"
-    private var selectedCountry: String = "in"
     private lateinit var mAdapter: NewsAdapter
+    private lateinit var trendingViewModel : TrendingViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -45,18 +38,26 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
         val root: View = binding.root
         val recyclerView: RecyclerView = binding.newsRecycler
-        var categorySpinner: Spinner = binding.categryDropDwn
-        var countrySpinner: Spinner = binding.countryDropDwn
+        val categorySpinner: Spinner = binding.categryDropDwn
+        val countrySpinner: Spinner = binding.countryDropDwn
 
-        prog = binding.progressCircular
+        progressBar = binding.progressCircular
 
         recyclerViewAdapter(recyclerView)
-
         categorySpinnerMethod(categorySpinner)
-
         countrySpinnerMethod(countrySpinner)
 
         return root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        trendingViewModel = ViewModelProvider(this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[TrendingViewModel::class.java]
+
+        mAdapter = NewsAdapter(this)
+        trendingViewModel.fetchData(mAdapter)
     }
 
     override fun onDestroyView() {
@@ -67,28 +68,17 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     @RequiresApi(Build.VERSION_CODES.O)
     private fun recyclerViewAdapter(recyclerView: RecyclerView){
         recyclerView.layoutManager = LinearLayoutManager(context)
-        fetchData()
-        mAdapter = NewsAdapter(this)
         recyclerView.adapter =mAdapter
     }
 
     private fun categorySpinnerMethod(categorySpinner: Spinner){
-
-        val categories = resources.getStringArray(R.array.category_array)
-
-        val adapter = context?.let {
-            ArrayAdapter(it, android.R.layout.simple_spinner_item, categories)
-        }
-
-        categorySpinner.adapter = adapter
-
         categorySpinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View?, position: Int, id: Long) {
-                selectedCategory = categories[position]
-                fetchData()
+                trendingViewModel.selectedCategory = parent.selectedItem.toString()
+                trendingViewModel.fetchData(mAdapter)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -97,53 +87,18 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     }
 
     private fun countrySpinnerMethod(countrySpinner: Spinner) {
-        val countries = resources.getStringArray(R.array.country_array)
-        val countryAdapter = context?.let {
-            ArrayAdapter(it, android.R.layout.simple_spinner_item, countries)
-        }
-        countrySpinner.adapter = countryAdapter
-
         countrySpinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View?, position: Int, id: Long) {
-                selectedCountry = Utils.countryMap[countries[position]].toString()
-                fetchData()
+                trendingViewModel.selectedCountry = Utils.countryMap[parent.selectedItem.toString()].toString()
+                trendingViewModel.fetchData(mAdapter)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun fetchData() {
-
-        prog.visibility = View.VISIBLE
-        val apiService: APIInterface = ApiClient.getClient().create(APIInterface::class.java)
-        val call: Call<Response> = if(selectedCategory=="All") {
-            apiService.getLatestNewsByCountry(selectedCountry, Utils.API_KEY)
-        } else {
-            apiService.getLatestNewsByCategoryAndCountry(selectedCategory, selectedCountry, Utils.API_KEY)
-        }
-
-        call.enqueue(object: Callback<Response> {
-            override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
-
-                if(response.body()?.status.equals("ok")) {
-                    val articleList : List<News> = response.body()!!.news
-                    if(articleList.isNotEmpty()) {
-                        mAdapter.updateNews(articleList)
-                        prog.visibility = View.INVISIBLE
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<Response>, t: Throwable) {
-                Toast.makeText(context, "News Can't be Fetched!!", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     override fun onItemClicked(item: News) {
