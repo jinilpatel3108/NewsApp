@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +44,11 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
         progressBar = binding.progressCircular
 
+        trendingViewModel.trendNews.observe(viewLifecycleOwner, Observer { list ->
+            list?.let {
+                mAdapter.updateNews(it)
+            }
+        })
         recyclerViewAdapter(recyclerView)
         categorySpinnerMethod(categorySpinner)
         countrySpinnerMethod(countrySpinner)
@@ -57,7 +63,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[TrendingViewModel::class.java]
 
         mAdapter = NewsAdapter(this)
-        trendingViewModel.fetchData(mAdapter)
+        trendingViewModel.fetchData()
     }
 
     override fun onDestroyView() {
@@ -78,7 +84,8 @@ class TrendingFragment : Fragment(), NewsItemClicked{
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View?, position: Int, id: Long) {
                 trendingViewModel.selectedCategory = parent.selectedItem.toString()
-                trendingViewModel.fetchData(mAdapter)
+                trendingViewModel.fetchData()
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -93,7 +100,8 @@ class TrendingFragment : Fragment(), NewsItemClicked{
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View?, position: Int, id: Long) {
                 trendingViewModel.selectedCountry = Utils.countryMap[parent.selectedItem.toString()].toString()
-                trendingViewModel.fetchData(mAdapter)
+                trendingViewModel.fetchData()
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
