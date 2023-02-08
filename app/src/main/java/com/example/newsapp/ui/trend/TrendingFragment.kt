@@ -44,6 +44,26 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
         progressBar = binding.progressCircular
 
+        recyclerViewAdapter(recyclerView)
+        categorySpinnerMethod(categorySpinner)
+        countrySpinnerMethod(countrySpinner)
+
+        return root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        trendingViewModel = ViewModelProvider(this)[TrendingViewModel::class.java]
+
+        mAdapter = NewsAdapter(this)
+        trendingViewModel.fetchData()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         trendingViewModel.trendNews.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 mAdapter.updateNews(it)
@@ -68,22 +88,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
                 Toast.makeText(context, "News Can't be Fetched", Toast.LENGTH_SHORT).show()
             }
         })
-        recyclerViewAdapter(recyclerView)
-        categorySpinnerMethod(categorySpinner)
-        countrySpinnerMethod(countrySpinner)
-
-        return root
     }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        trendingViewModel = ViewModelProvider(this)[TrendingViewModel::class.java]
-
-        mAdapter = NewsAdapter(this)
-        trendingViewModel.fetchData()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

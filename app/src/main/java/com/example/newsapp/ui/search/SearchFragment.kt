@@ -37,20 +37,20 @@ class SearchFragment : Fragment() , NewsItemClicked{
         val recyclerView: RecyclerView = binding.newsRecyclerSearched
         searchView = binding.searchBar
 
+        recyclerViewAdapter(recyclerView)
+        searchViewMethod(searchView)
+
+        return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         searchViewModel.searchNews.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 mAdapter.updateNews(it)
             }
         })
-
-        searchViewModel.queryString.observe(viewLifecycleOwner, Observer {
-            searchViewModel.fetchData()
-        })
-
-        recyclerViewAdapter(recyclerView)
-        searchViewMethod(searchView)
-
-        return root
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -65,7 +65,10 @@ class SearchFragment : Fragment() , NewsItemClicked{
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onQueryTextSubmit(query: String?): Boolean {
-                searchViewModel.queryString.postValue(query)
+                if (query != null) {
+                    searchViewModel.setQuery(query)
+                    searchViewModel.fetchData()
+                }
                 return false
             }
 

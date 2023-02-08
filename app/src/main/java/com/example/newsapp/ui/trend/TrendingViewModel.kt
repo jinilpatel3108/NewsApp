@@ -13,7 +13,7 @@ import retrofit2.Call
 import retrofit2.Callback
 
 @RequiresApi(Build.VERSION_CODES.O)
-class TrendingViewModel() : ViewModel() {
+class TrendingViewModel : ViewModel() {
 
     var selectedCategory: String = "All"
     var selectedCountry: String = "in"
@@ -27,7 +27,6 @@ class TrendingViewModel() : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun fetchData() {
-
         val apiService: APIInterface = ApiClient.getClient().create(APIInterface::class.java)
         val call: Call<Response> = if(selectedCategory=="All") {
             apiService.getLatestNewsByCountry(selectedCountry, Utils.API_KEY)

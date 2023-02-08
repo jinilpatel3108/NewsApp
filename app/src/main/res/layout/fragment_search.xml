@@ -13,9 +13,7 @@
         android:layout_height="wrap_content"
         app:queryHint="Search News here..."
         app:iconifiedByDefault="false"
-
         />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/news_recycler_searched"
@@ -26,6 +24,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </RelativeLayout>

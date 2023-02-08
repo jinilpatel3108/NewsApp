@@ -13,20 +13,14 @@ import retrofit2.Callback
 class SearchViewModel(): ViewModel() {
 
     var searchNews : MutableLiveData<List<News>> = MutableLiveData<List<News>>()
-    var queryString: MutableLiveData<String> = MutableLiveData<String>()
-
-    init {
-        fetchData()
-    }
+    private var queryString: String = ""
 
     fun fetchData(){
         val apiService: APIInterface = ApiClient.getClient().create(APIInterface::class.java)
-        val call : Call<Response>? = queryString?.let { it.value?.let { it1 ->
-            apiService.getSearchedNews(
-                it1, Utils.API_KEY)
-        } }
+        val call : Call<Response> = apiService.getSearchedNews(
+                    queryString, Utils.API_KEY)
 
-        call?.enqueue(object: Callback<Response> {
+        call.enqueue(object: Callback<Response> {
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
 
                 if(response.body()?.status.equals("ok")) {
@@ -43,6 +37,7 @@ class SearchViewModel(): ViewModel() {
         })
     }
 
-
-
+    fun setQuery(query: String) {
+        queryString = query
+    }
 }
