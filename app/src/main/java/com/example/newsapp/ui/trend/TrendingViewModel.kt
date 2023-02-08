@@ -18,6 +18,8 @@ class TrendingViewModel() : ViewModel() {
     var selectedCategory: String = "All"
     var selectedCountry: String = "in"
     var trendNews : MutableLiveData<List<News>> = MutableLiveData<List<News>>()
+    var isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
+    var isFailure: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
 
     init {
         fetchData()
@@ -41,10 +43,13 @@ class TrendingViewModel() : ViewModel() {
                     if(articleList.isNotEmpty()) {
                         trendNews.apply { postValue(articleList) }
                     }
+                    isLoading.apply { postValue(false) }
+                    isFailure.apply { postValue(false) }
                 }
             }
 
             override fun onFailure(call: Call<Response>, t: Throwable) {
+                isFailure.apply { postValue(true) }
             }
         })
     }

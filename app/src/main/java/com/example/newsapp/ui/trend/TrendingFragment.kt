@@ -49,6 +49,25 @@ class TrendingFragment : Fragment(), NewsItemClicked{
                 mAdapter.updateNews(it)
             }
         })
+
+        trendingViewModel.isLoading.observe(viewLifecycleOwner, Observer {
+            if(it)
+            {
+                progressBar.visibility = View.VISIBLE
+            }
+            else
+            {
+                progressBar.visibility = View.INVISIBLE
+            }
+        })
+
+        trendingViewModel.isFailure.observe(viewLifecycleOwner, Observer {
+            if(it)
+            {
+                progressBar.visibility = View.INVISIBLE
+                Toast.makeText(context, "News Can't be Fetched", Toast.LENGTH_SHORT).show()
+            }
+        })
         recyclerViewAdapter(recyclerView)
         categorySpinnerMethod(categorySpinner)
         countrySpinnerMethod(countrySpinner)
@@ -59,8 +78,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        trendingViewModel = ViewModelProvider(this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[TrendingViewModel::class.java]
+        trendingViewModel = ViewModelProvider(this)[TrendingViewModel::class.java]
 
         mAdapter = NewsAdapter(this)
         trendingViewModel.fetchData()
