@@ -9,24 +9,22 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.newsapp.NewsDetailActivity
 import com.example.newsapp.data.NewsAdapter
-import com.example.newsapp.data.NewsItemClicked
+import com.example.newsapp.data.NewsItemListener
 import com.example.newsapp.databinding.FragmentTrendingBinding
 import com.example.newsapp.model.News
-import com.example.newsapp.SingleNews
 import com.example.newsapp.utils.Utils
 
-class TrendingFragment : Fragment(), NewsItemClicked{
+class TrendingFragment : Fragment(), NewsItemListener {
 
     private var _binding: FragmentTrendingBinding? = null
-    private lateinit var progressBar: ProgressBar
     private val binding get() = _binding!!
     private lateinit var mAdapter: NewsAdapter
-    private lateinit var trendingViewModel : TrendingViewModel
+    private val trendingViewModel: TrendingViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -37,78 +35,60 @@ class TrendingFragment : Fragment(), NewsItemClicked{
 
         _binding = FragmentTrendingBinding.inflate(inflater, container, false)
 
-        val root: View = binding.root
-        val recyclerView: RecyclerView = binding.newsRecycler
-        val categorySpinner: Spinner = binding.categryDropDwn
-        val countrySpinner: Spinner = binding.countryDropDwn
+        initRecyclerView()
+        initCategorySpinner()
+        initCountrySpinner()
 
-        progressBar = binding.progressCircular
-
-        recyclerViewAdapter(recyclerView)
-        categorySpinnerMethod(categorySpinner)
-        countrySpinnerMethod(countrySpinner)
-
-        return root
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        trendingViewModel = ViewModelProvider(this)[TrendingViewModel::class.java]
-
-        mAdapter = NewsAdapter(this)
-        trendingViewModel.fetchData()
+        return binding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         trendingViewModel.trendNews.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
-                mAdapter.updateNews(it)
+                mAdapter.updateNewsList(it)
             }
         })
 
-        trendingViewModel.isLoading.observe(viewLifecycleOwner, Observer {
-            if(it)
-            {
-                progressBar.visibility = View.VISIBLE
+        trendingViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
             }
-            else
-            {
-                progressBar.visibility = View.INVISIBLE
-            }
-        })
+        }
 
-        trendingViewModel.isFailure.observe(viewLifecycleOwner, Observer {
-            if(it)
-            {
-                progressBar.visibility = View.INVISIBLE
+        trendingViewModel.isFailure.observe(viewLifecycleOwner) { isError ->
+            if (isError) {
+                binding.progressBar.visibility = View.INVISIBLE
                 Toast.makeText(context, "News Can't be Fetched", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun recyclerViewAdapter(recyclerView: RecyclerView){
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter =mAdapter
+    private fun initRecyclerView() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        mAdapter = NewsAdapter(this)
+        binding.recyclerView.adapter = mAdapter
     }
 
-    private fun categorySpinnerMethod(categorySpinner: Spinner){
-        categorySpinner.onItemSelectedListener = object :
+    private fun initCategorySpinner() {
+        binding.categoryDropDwn.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             @RequiresApi(Build.VERSION_CODES.O)
-            override fun onItemSelected(parent: AdapterView<*>,
-                                        view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?, position: Int, id: Long
+            ) {
                 trendingViewModel.selectedCategory = parent.selectedItem.toString()
-                trendingViewModel.fetchData()
-
+                trendingViewModel.fetchTrendingNews()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -116,15 +96,17 @@ class TrendingFragment : Fragment(), NewsItemClicked{
         }
     }
 
-    private fun countrySpinnerMethod(countrySpinner: Spinner) {
-        countrySpinner.onItemSelectedListener = object :
+    private fun initCountrySpinner() {
+        binding.countryDropDwn.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             @RequiresApi(Build.VERSION_CODES.O)
-            override fun onItemSelected(parent: AdapterView<*>,
-                                        view: View?, position: Int, id: Long) {
-                trendingViewModel.selectedCountry = Utils.countryMap[parent.selectedItem.toString()].toString()
-                trendingViewModel.fetchData()
-
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?, position: Int, id: Long
+            ) {
+                trendingViewModel.selectedCountry =
+                    Utils.countryMap[parent.selectedItem.toString()].toString()
+                trendingViewModel.fetchTrendingNews()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -133,7 +115,7 @@ class TrendingFragment : Fragment(), NewsItemClicked{
     }
 
     override fun onItemClicked(item: News) {
-        val intent = Intent(context, SingleNews::class.java)
+        val intent = Intent(context, NewsDetailActivity::class.java)
         intent.putExtra("News", item)
         startActivity(intent)
     }

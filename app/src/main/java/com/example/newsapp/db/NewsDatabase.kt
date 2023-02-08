@@ -6,22 +6,22 @@ import com.example.newsapp.model.News
 
 @Database(
     entities = [News::class],
-    version = 4
+    version = 1
 )
 @TypeConverters(Converters::class)
-abstract class ArticleDB : RoomDatabase() {
+abstract class NewsDatabase : RoomDatabase() {
 
-    abstract fun getArticleDao(): NewsDao
+    abstract fun getNewsDao(): NewsDao
 
     companion object {
-        private var instance: ArticleDB? = null
+        private var instance: NewsDatabase? = null
 
-        fun getInstance(context: Context): ArticleDB {
-            if(instance==null) {
+        fun getInstance(context: Context): NewsDatabase {
+            if (instance == null) {
                 instance = Room.databaseBuilder(
                     context.applicationContext,
-                    ArticleDB::class.java,
-                    "article_db.db"
+                    NewsDatabase::class.java,
+                    "news.db"
                 ).fallbackToDestructiveMigration().build()
             }
             return instance!!
