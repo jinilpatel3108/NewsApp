@@ -18,7 +18,7 @@ import com.example.newsapp.model.News
 class SavedFragment : Fragment(), NewsItemClicked {
 
     private var _binding: FragmentSavedBinding? = null
-
+    lateinit var savedViewModel: SavedViewModel
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -41,12 +41,16 @@ class SavedFragment : Fragment(), NewsItemClicked {
         recyclerView.layoutManager = LinearLayoutManager(context)
         val mAdapter = NewsAdapter(this)
         recyclerView.adapter = mAdapter
-        saveViewModel(mAdapter)
+        saveViewModelFun(mAdapter)
     }
 
-    private fun saveViewModel(mAdapter: NewsAdapter){
-        val savedViewModel = ViewModelProvider(this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[SavedViewModel::class.java]
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        savedViewModel = ViewModelProvider(this,SavedViewModelFactory(requireActivity().application))[SavedViewModel::class.java]
+
+    }
+
+    private fun saveViewModelFun(mAdapter: NewsAdapter){
 
         savedViewModel.allNews.observe(viewLifecycleOwner, Observer {list ->
             list?.let {

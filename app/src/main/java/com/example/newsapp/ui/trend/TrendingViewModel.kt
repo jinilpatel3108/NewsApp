@@ -43,6 +43,8 @@ class TrendingViewModel() : ViewModel() {
                     if(articleList.isNotEmpty()) {
                         trendNews.apply { postValue(articleList) }
                     }
+                    isLoading.value = false
+                    trendNews.value = articleList
                     isLoading.apply { postValue(false) }
                     isFailure.apply { postValue(false) }
                 }

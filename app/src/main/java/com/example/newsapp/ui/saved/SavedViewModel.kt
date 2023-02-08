@@ -7,7 +7,7 @@ import com.example.newsapp.db.NewsRepository
 import com.example.newsapp.model.News
 
 
-class SavedViewModel(application: Application): AndroidViewModel(application) {
+class SavedViewModel(application: Application): ViewModel() {
 
     var allNews : LiveData<List<News>>
     private var repository: NewsRepository
