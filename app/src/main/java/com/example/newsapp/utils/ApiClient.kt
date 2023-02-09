@@ -1,6 +1,10 @@
 package com.example.newsapp.utils
 
 import com.example.newsapp.model.NewsResponse
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,8 +18,20 @@ class ApiClient {
         private val retrofit: APIInterface? = null
 
         fun getInstance(): APIInterface {
+
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+            val client: OkHttpClient = OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .addNetworkInterceptor(Interceptor { chain ->
+                    val request: Request =
+                        chain.request().newBuilder()
+                            .build()
+                    chain.proceed(request)
+                }).build()
+
             if (retrofit == null) {
-                return Retrofit.Builder().baseUrl(BASE_URL)
+                return Retrofit.Builder().baseUrl(BASE_URL).client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build().create(APIInterface::class.java)
             }
