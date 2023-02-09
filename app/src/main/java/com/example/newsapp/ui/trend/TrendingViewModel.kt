@@ -5,8 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.newsapp.model.News
-import com.example.newsapp.model.Response
-import com.example.newsapp.utils.APIInterface
+import com.example.newsapp.model.NewsResponse
 import com.example.newsapp.utils.ApiClient
 import com.example.newsapp.utils.Utils
 import retrofit2.Call
@@ -17,40 +16,43 @@ class TrendingViewModel : ViewModel() {
 
     var selectedCategory: String = "All"
     var selectedCountry: String = "in"
-    var trendNews : MutableLiveData<List<News>> = MutableLiveData<List<News>>()
+    var trendNews: MutableLiveData<List<News>> = MutableLiveData<List<News>>()
     var isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
     var isFailure: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
 
     init {
-        fetchData()
+        fetchTrendingNews()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun fetchData() {
-        val apiService: APIInterface = ApiClient.getClient().create(APIInterface::class.java)
-        val call: Call<Response> = if(selectedCategory=="All") {
-            apiService.getLatestNewsByCountry(selectedCountry, Utils.API_KEY)
+    fun fetchTrendingNews() {
+        val call = if (selectedCategory == "All") {
+            ApiClient.getInstance().getLatestNewsByCountry(country = selectedCountry)
         } else {
-            apiService.getLatestNewsByCategoryAndCountry(selectedCategory, selectedCountry, Utils.API_KEY)
+            ApiClient.getInstance().getLatestNewsByCategoryAndCountry(
+                category = selectedCategory,
+                country = selectedCountry
+            )
         }
 
-        call.enqueue(object: Callback<Response> {
-            override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
-
-                if(response.body()?.status.equals("ok")) {
-                    val articleList : List<News> = response.body()!!.news
-                    if(articleList.isNotEmpty()) {
-                        trendNews.apply { postValue(articleList) }
+        call.enqueue(object : Callback<NewsResponse> {
+            override fun onResponse(
+                call: Call<NewsResponse>,
+                response: retrofit2.Response<NewsResponse>
+            ) {
+                if (response.body()?.status.equals("ok")) {
+                    val articleList: List<News> = response.body()!!.news
+                    if (articleList.isNotEmpty()) {
+                        trendNews.value = articleList
                     }
                     isLoading.value = false
-                    trendNews.value = articleList
-                    isLoading.apply { postValue(false) }
-                    isFailure.apply { postValue(false) }
+                    isFailure.value = false
                 }
             }
 
-            override fun onFailure(call: Call<Response>, t: Throwable) {
-                isFailure.apply { postValue(true) }
+            override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
+                isLoading.value = false
+                isFailure.value = true
             }
         })
     }

@@ -7,23 +7,20 @@ import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.newsapp.SingleNews
+import com.example.newsapp.NewsDetailActivity
 import com.example.newsapp.data.NewsAdapter
-import com.example.newsapp.data.NewsItemClicked
+import com.example.newsapp.data.NewsItemListener
 import com.example.newsapp.databinding.FragmentSearchBinding
 import com.example.newsapp.model.News
 
-class SearchFragment : Fragment() , NewsItemClicked{
+class SearchFragment : Fragment() , NewsItemListener{
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private lateinit var mAdapter: NewsAdapter
-    private lateinit var searchViewModel: SearchViewModel
-    private lateinit var searchView: SearchView
+    private val searchViewModel: SearchViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -32,44 +29,40 @@ class SearchFragment : Fragment() , NewsItemClicked{
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-
-        val root: View = binding.root
-        val recyclerView: RecyclerView = binding.newsRecyclerSearched
-        searchView = binding.searchBar
-
-        recyclerViewAdapter(recyclerView)
-        searchViewMethod(searchView)
-
-        return root
+        initRecyclerView()
+        initSearchView()
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        searchViewModel.searchNews.observe(viewLifecycleOwner, Observer { list ->
+        searchViewModel.newsList.observe(viewLifecycleOwner) { list ->
             list?.let {
-                mAdapter.updateNews(it)
+                mAdapter.updateNewsList(it)
             }
-        })
+        }
+        searchViewModel.isError.observe(viewLifecycleOwner) { isError ->
+            if (isError) {
+                // Handle error
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun recyclerViewAdapter(recyclerView: RecyclerView){
-        recyclerView.layoutManager = LinearLayoutManager(context)
+    private fun initRecyclerView(){
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
         mAdapter = NewsAdapter(this)
-        recyclerView.adapter =mAdapter
-        searchViewModel.fetchData()
+        binding.recyclerView.adapter = mAdapter
     }
 
-    private fun searchViewMethod(searchView: SearchView){
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+    private fun initSearchView(){
+        binding.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
-                    searchViewModel.setQuery(query)
-                    searchViewModel.fetchData()
+                if (query?.isNotEmpty() == true) {
+                    searchViewModel.searchNews(query)
                 }
-                return false
+                return true
             }
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -79,18 +72,13 @@ class SearchFragment : Fragment() , NewsItemClicked{
         })
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        searchViewModel= ViewModelProvider(this)[SearchViewModel::class.java]
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     override fun onItemClicked(item: News) {
-        val intent = Intent(context, SingleNews::class.java)
+        val intent = Intent(context, NewsDetailActivity::class.java)
         intent.putExtra("News", item)
         startActivity(intent)
     }

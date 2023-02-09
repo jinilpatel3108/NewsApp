@@ -6,20 +6,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.newsapp.SingleNews
+import com.example.newsapp.NewsDetailActivity
 import com.example.newsapp.data.NewsAdapter
-import com.example.newsapp.data.NewsItemClicked
+import com.example.newsapp.data.NewsItemListener
 import com.example.newsapp.databinding.FragmentSavedBinding
+import com.example.newsapp.db.NewsDatabase
+import com.example.newsapp.db.NewsRepository
 import com.example.newsapp.model.News
 
-class SavedFragment : Fragment(), NewsItemClicked {
+class SavedFragment : Fragment(), NewsItemListener {
 
     private var _binding: FragmentSavedBinding? = null
-    lateinit var savedViewModel: SavedViewModel
     private val binding get() = _binding!!
+    private lateinit var adapter: NewsAdapter
+    private val savedViewModel by viewModels<SavedViewModel> {
+        SavedViewModelFactory(
+            NewsRepository(
+                NewsDatabase.getInstance(requireActivity().applicationContext).getNewsDao()
+            )
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,32 +38,22 @@ class SavedFragment : Fragment(), NewsItemClicked {
 
         _binding = FragmentSavedBinding.inflate(inflater, container, false)
 
-        val root: View = binding.root
-        val recyclerView: RecyclerView = binding.newsRecyclerSaved
+        initRecyclerView()
 
-        recyclerViewAdapter(recyclerView)
-
-        return root
+        return binding.root
     }
 
-    private fun recyclerViewAdapter(recyclerView: RecyclerView){
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        val mAdapter = NewsAdapter(this)
-        recyclerView.adapter = mAdapter
-        saveViewModelFun(mAdapter)
+    private fun initRecyclerView() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        adapter = NewsAdapter(this)
+        binding.recyclerView.adapter = adapter
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        savedViewModel = ViewModelProvider(this,SavedViewModelFactory(requireActivity().application))[SavedViewModel::class.java]
-
-    }
-
-    private fun saveViewModelFun(mAdapter: NewsAdapter){
-
-        savedViewModel.allNews.observe(viewLifecycleOwner, Observer {list ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        savedViewModel.savedNews.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
-                mAdapter.updateNews(it)
+                adapter.updateNewsList(it)
             }
         })
     }
@@ -65,7 +64,7 @@ class SavedFragment : Fragment(), NewsItemClicked {
     }
 
     override fun onItemClicked(item: News) {
-        val intent = Intent(context, SingleNews::class.java)
+        val intent = Intent(context, NewsDetailActivity::class.java)
         intent.putExtra("News", item)
         startActivity(intent)
     }

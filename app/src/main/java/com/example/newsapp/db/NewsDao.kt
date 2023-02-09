@@ -13,7 +13,7 @@ interface NewsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNews(news: News): Long
 
-    @Query("SELECT * FROM news_db")
+    @Query("SELECT * FROM news")
     fun getAllNews(): LiveData<List<News>>
 
     @Delete
